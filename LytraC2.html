@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <style>
+        .container{
+            margin-top:10em;
+        }
+        .btnRow{
+            display: flex;
+        }
+        .actionBtn{
+            margin-right: 1em;
+        }
+        .mRow{
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        .console{
+            height: 15em;
+            background-color: #808080;
+            color: #ffffff;
+        }
+        .console:focus{
+            height: 15em;
+            background-color: #808080;
+            color: #ffffff;
+        }
+    </style>
+    </head>
+  <body>
+    
+    <div class="container">
+        <div class="mRow">
+            <h2>Lytra C2</h2>
+        </div>
+        <div class="mRow">
+            <input type="text" class="form-control" id="targetIP" placeholder="IP" value="116.12.155.107">
+        </div>
+        <div class="mRow btnRow">
+            <button class="btn btn-primary actionBtn" onclick="startAll()">Start All</button>
+            <button class="btn btn-primary actionBtn" onclick="stopAll()">Stop All</button>
+            <button class="btn btn-success actionBtn" onclick="sanityAll()">Sanity Check</button>
+        </div>
+        <div class="mRow">
+            <textarea class="console form-control" id="console"></textarea>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script>
+
+        var zombieList = [
+           "193.233.133.54",
+        ];
+
+        var sanityList = {
+            
+        }
+        for (let i = 0; i < zombieList.length; i++) {
+            sanityList[zombieList[i]] = "Unchecked";
+        }
+        
+        function displayConsole(){
+            var k = Object.keys(sanityList)
+            var outp = "";
+            for (let i = 0; i < k.length; i++) {
+                outp += `${k[i]} - ${sanityList[k[i]]}\n`;
+            }
+            document.getElementById('console').innerHTML = outp;
+        }
+
+        function startAll(){
+
+        }
+
+        function stopAll(){
+
+        }
+
+        function sanityAll(){
+
+            for (let i = 0; i < zombieList.length; i++) {
+                var zombIP = zombieList[i];
+                $.ajax({
+                    url: `http://${zombIP}/sanityCheck`, 
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({ 
+                    }),
+                    timeout: 2000,
+                    success: function (data) {
+                        sanityList[zombIP] = "Idle";
+                    },
+                    error: function(err){
+                        sanityList[zombIP] = "Down";
+                    },
+                });
+            }
+
+        }
+
+        setInterval(displayConsole, 1000);
+    </script>
+</body>
+</html>

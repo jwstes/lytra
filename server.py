@@ -42,5 +42,9 @@ def stop_script():
     except Exception as e:
         return jsonify(error=str(e)), 500
 
+@app.route('/sanityCheck', methods=['POST'])
+def sanityCheck():
+    return jsonify({"stauts" : "200"})
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=80)
