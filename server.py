@@ -1,8 +1,11 @@
 from flask import Flask, jsonify, request
 import subprocess
 import psutil
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 
 python_process = None
 myID = None
