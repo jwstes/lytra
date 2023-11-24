@@ -1,0 +1,5 @@
+apt update
+apt install python3-pip
+pip install psutil Flask flask_cors
+git clone https://github.com/jwstes/lytra.git
+cd lytra && python3 server.py

