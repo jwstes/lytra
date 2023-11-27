@@ -19,9 +19,9 @@ def start_script():
 
     try:
         data = request.get_json()
-        print(data)
-        # python_process = subprocess.Popen(['python3', 'lytra.py', f'{data["trg"]}', '1'])
-        # myID = data['id']
+        # print(data)
+        python_process = subprocess.Popen(['python3', 'lytra.py', f'{data["trg"]}', '1'])
+        myID = data['id']
 
         return jsonify(message=f'Lyta {data["id"]} Started!')
     except Exception as e:

@@ -3,3 +3,14 @@ apt install python3-pip
 pip install psutil Flask flask_cors
 git clone https://github.com/jwstes/lytra.git
 cd lytra && python3 server.py
+
+
+
+reinstalling wget
+apt purge --auto-remove wget
+apt install wget
+
+
+
+wget https://raw.githubusercontent.com/jwstes/lytra/master/lytraSetup.sh
+chmod +x lytraSetup.sh && ./lytraSetup.sh
