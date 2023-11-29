@@ -2,6 +2,7 @@
 sudo apt update
 apt install python3-pip
 pip install psutil Flask flask_cors
+apt install python3-scapy
 sudo apt remove git && sudo apt install git
 sudo git clone https://github.com/jwstes/lytra.git /root/lytra
 
