@@ -12,8 +12,7 @@ apt install wget
 
 
 
-wget https://raw.githubusercontent.com/jwstes/lytra/master/lytraSetup.sh
-chmod +x lytraSetup.sh && ./lytraSetup.sh
+wget https://raw.githubusercontent.com/jwstes/lytra/master/lytraSetup.sh && chmod +x lytraSetup.sh && ./lytraSetup.sh
 
 
 supervisorctl stop flask_app && rm -r lytra && git clone https://github.com/jwstes/lytra.git && supervisorctl start flask_app

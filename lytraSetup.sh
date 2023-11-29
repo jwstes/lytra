@@ -7,6 +7,8 @@ git clone https://github.com/jwstes/lytra.git
 # Install Supervisor
 sudo apt install supervisor
 
+sudo apt install nload
+
 # Create Supervisor configuration file
 sudo nano /etc/supervisor/conf.d/flask_app.conf
 
