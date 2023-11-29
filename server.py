@@ -9,28 +9,42 @@ CORS(app)
 
 python_process = None
 myID = None
+bootingIP = None
 
-@app.route('/start', methods=['POST'])
+@app.route('/reim', methods=['POST'])
 def start_script():
     global python_process
     global myID
+    global bootingIP
+
     if python_process is not None and python_process.poll() is None:
         return jsonify(error='Python script is already running'), 400
 
     try:
         data = request.get_json()
         # print(data)
-        python_process = subprocess.Popen(['python3', 'lytra.py', f'{data["trg"]}', '1'])
+
+        bootingIP = data["trg"]
+        dropCommand = f"sudo iptables -A INPUT -s {data['trg']} -j DROP"
+        subprocess.run(dropCommand, shell=True)
+
+
+        python_process = subprocess.Popen(['python3', 'lytrav2.py', f'{data["method"]}', f'{data["trg"]}', f'{data["port"]}', f'{data["processes"]}'])
         myID = data['id']
+        
 
         return jsonify(message=f'Lyta {data["id"]} Started!')
     except Exception as e:
         return jsonify(error=str(e)), 500
 
-@app.route('/stop', methods=['POST'])
+@app.route('/hyud', methods=['POST'])
 def stop_script():
     global python_process
     global myID
+    global bootingIP
+
+    removeDropCommand = f"sudo iptables -D INPUT -s {bootingIP} -j DROP"
+    subprocess.run(removeDropCommand, shell=True)
 
     if python_process is None or python_process.poll() is not None:
         return jsonify(error='No running Python script to stop'), 400

