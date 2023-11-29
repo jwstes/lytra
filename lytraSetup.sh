@@ -2,7 +2,8 @@
 sudo apt update
 apt install python3-pip
 pip install psutil Flask flask_cors
-git clone https://github.com/jwstes/lytra.git /root/lytra
+sudo apt remove git && sudo apt install git
+sudo git clone https://github.com/jwstes/lytra.git /root/lytra
 
 # Install Supervisor
 sudo apt install supervisor
