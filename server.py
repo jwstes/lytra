@@ -29,7 +29,7 @@ def start_script():
         subprocess.run(dropCommand, shell=True)
 
 
-        python_process = subprocess.Popen(['python3', 'lytrav2.py', f'{data["method"]}', f'{data["trg"]}', f'{data["port"]}', f'{data["processes"]}'])
+        python_process = subprocess.Popen(['python3', 'lytrav2.py', f'{data["method"]}', f'{data["trg"]}', f'{data["port"]}', f'{data["processes"]}', f'{data["udpPacketSize"]}'])
         myID = data['id']
         
 
